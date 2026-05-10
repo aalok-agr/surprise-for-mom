@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise Gift for Mom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #fff5f7;
+        }
+
+        /* View Switching Logic */
+        .page {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .balloon-anim {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Transition Overlay */
+        #transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .envelope-gif {
+            width: 300px;
+            max-width: 80%;
+            border-radius: 15px;
+        }
+
+        .pink-text { color: #ff69b4; }
+        .pink-bg { background-color: #ff69b4; }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: HOME -->
+    <main id="home-page" class="page active">
+        <h2 class="text-3xl font-bold pink-text mb-4">Here is your surprise gift!</h2>
+        <p class="text-gray-600 mb-8">Click the button below to open your gift!</p>
+        
+        <button onclick="openEnvelope()" class="pink-bg text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            Open Gift
+        </button>
+
+        <div class="mt-12 space-y-4">
+            <h1 class="text-sm uppercase tracking-widest text-gray-400">In my Coding Style</h1>
+            <div class="flex flex-col items-center">
+                <!-- Balloon Asset -->
+                <img src="balloon.webp" 
+                     alt="Happy Mother's Day Balloon" 
+                     id="balloon" 
+                     class="balloon-anim w-48 h-auto cursor-pointer"
+                     onerror="this.src='https://images.unsplash.com/photo-1530103862676-fa8c91badbbe?q=80&w=300&auto=format&fit=crop'">
+            </div>
+        </div>
+    </main>
+
+    <!-- TRANSITION OVERLAY (Envelope Animation) -->
+    <div id="transition-overlay">
+        <img src="intro.gif" alt="Opening Envelope..." class="envelope-gif" id="envelope-anim">
+        <p class="mt-4 pink-text font-medium animate-pulse">Opening your gift...</p>
+    </div>
+
+    <!-- PAGE 2: MAIN CONTENT -->
+    <main id="main-page" class="page">
+        <div class="max-w-2xl bg-white p-8 rounded-3xl shadow-xl border-t-8 border-pink-400">
+            <h1 class="text-4xl font-bold pink-text mb-6">Happy Mother's Day!</h1>
+            
+            <div class="space-y-4 text-gray-700 leading-relaxed text-lg">
+                <p class="font-bold text-xl">Dear Mom,</p>
+                <p>
+                    Thank you for always being there for me, for your unconditional love and support. 
+                    You are the best mom in the world, and I am so grateful to have you in my life.
+                </p>
+                <p>
+                    Wishing you a wonderful Mother's Day filled with love and happiness!
+                </p>
+            </div>
+
+            <div class="mt-10 pt-6 border-t border-pink-100">
+                <h2 class="text-2xl font-bold pink-text mb-2">Once again</h2>
+                <p class="text-pink-500 font-medium italic mb-6">Happy Mother's Day, Mom! I love you!</p>
+                
+                <img src="mumandme.jpeg" 
+                     alt="Me and Mom" 
+                     class="mx-auto rounded-xl shadow-md w-72 object-cover"
+                     onerror="this.src='https://images.unsplash.com/photo-1544145945-f904253db0ad?q=80&w=400&auto=format&fit=crop'">
+            </div>
+            
+            <button onclick="resetGift()" class="mt-8 text-xs text-gray-400 hover:text-pink-400 underline">
+                View gift again
+            </button>
+        </div>
+    </main>
+
+    <script>
+        function openEnvelope() {
+            const home = document.getElementById('home-page');
+            const main = document.getElementById('main-page');
+            const overlay = document.getElementById('transition-overlay');
+            const envelopeImg = document.getElementById('envelope-anim');
+
+            // 1. Show the overlay
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+
+            // 2. Wait for the GIF animation to "play" (e.g., 2.5 seconds)
+            setTimeout(() => {
+                // Fade out overlay
+                overlay.style.opacity = '0';
+                
+                // Switch pages
+                home.classList.remove('active');
+                main.classList.add('active');
+
+                // Hide overlay after transition
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 500);
+            }, 2500); // Adjust this timing to match your intro.gif duration
+        }
+
+        function resetGift() {
+            document.getElementById('main-page').classList.remove('active');
+            document.getElementById('home-page').classList.add('active');
+        }
+
+        // Balloon click interaction
+        const balloon = document.getElementById('balloon');
+        balloon.addEventListener('click', () => {
+            // Speed up the float briefly when clicked
+            balloon.style.animation = 'float 0.5s ease-in-out 2';
+            setTimeout(() => {
+                balloon.style.animation = 'float 3s ease-in-out infinite';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
